@@ -1,0 +1,56 @@
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n_local
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      - GENERIC_TIMEZONE=Asia/Ho_Chi_Minh
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+      - ./ho_so_mua_sam:/home/node/.n8n-files
+
+# Python worker
+  python-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    container_name: python-worker
+    restart: always
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./ho_so_mua_sam:/data
+      - ./:/app
+  
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=mua_sam_db
+      - TZ=Asia/Ho_Chi_Minh
+      - PGTZ=Asia/Ho_Chi_Minh 
+    command: postgres -c timezone=Asia/Ho_Chi_Minh
+    ports:
+      - "5432:5432"
+    volumes:
+      - n8n_postgres_data:/var/lib/postgresql/data
+
+# Appsmith
+  appsmith:
+    image: index.docker.io/appsmith/appsmith-ce:latest
+    container_name: appsmith
+    restart: always
+    ports:
+      - "8080:80" 
+    volumes:
+      - ./appsmith-data:/appsmith-stacks
+
+# 🔥 THẦN CHÚ KHAI BÁO VOLUME KHỐI TỔNG NẰM Ở ĐÂY NÈ CU:
+volumes:
+  n8n_postgres_data:
+    external: true

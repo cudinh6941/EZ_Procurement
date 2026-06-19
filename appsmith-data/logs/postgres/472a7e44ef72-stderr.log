@@ -1,0 +1,27 @@
+2026-05-12 06:18:50.093 UTC [1725] LOG:  starting PostgreSQL 14.22 (Ubuntu 14.22-1.pgdg24.04+1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+2026-05-12 06:18:50.093 UTC [1725] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-05-12 06:18:50.107 UTC [1725] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-05-12 06:18:50.198 UTC [1764] LOG:  database system was shut down at 2026-05-12 06:18:48 UTC
+2026-05-12 06:18:50.342 UTC [1725] LOG:  database system is ready to accept connections
+2026-05-12 06:37:00.471 UTC [1725] LOG:  received smart shutdown request
+2026-05-12 06:37:00.500 UTC [1725] LOG:  background worker "logical replication launcher" (PID 1773) exited with exit code 1
+2026-05-12 06:37:00.503 UTC [1766] LOG:  shutting down
+2026-05-12 06:37:00.643 UTC [1725] LOG:  database system is shut down
+2026-05-12 06:37:18.716 UTC [1740] LOG:  starting PostgreSQL 14.22 (Ubuntu 14.22-1.pgdg24.04+1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+2026-05-12 06:37:18.716 UTC [1740] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-05-12 06:37:18.735 UTC [1740] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-05-12 06:37:18.806 UTC [1772] LOG:  database system was shut down at 2026-05-12 06:37:15 UTC
+2026-05-12 06:37:18.917 UTC [1740] LOG:  database system is ready to accept connections
+2026-05-12 06:44:51.004 UTC [1740] LOG:  received smart shutdown request
+2026-05-12 06:44:51.026 UTC [1740] LOG:  background worker "logical replication launcher" (PID 1784) exited with exit code 1
+2026-05-12 06:44:51.027 UTC [1779] LOG:  shutting down
+2026-05-12 06:44:51.117 UTC [1740] LOG:  database system is shut down
+2026-05-12 06:45:11.764 UTC [1744] LOG:  starting PostgreSQL 14.22 (Ubuntu 14.22-1.pgdg24.04+1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+2026-05-12 06:45:11.764 UTC [1744] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-05-12 06:45:11.788 UTC [1744] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-05-12 06:45:11.902 UTC [1783] LOG:  database system was shut down at 2026-05-12 06:45:09 UTC
+2026-05-12 06:45:12.036 UTC [1744] LOG:  database system is ready to accept connections
+2026-05-12 06:48:06.874 UTC [1744] LOG:  received smart shutdown request
+2026-05-12 06:48:06.910 UTC [1744] LOG:  background worker "logical replication launcher" (PID 1795) exited with exit code 1
+2026-05-12 06:48:06.924 UTC [1790] LOG:  shutting down
+2026-05-12 06:48:07.151 UTC [1744] LOG:  database system is shut down

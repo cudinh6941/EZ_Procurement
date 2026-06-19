@@ -1,0 +1,36 @@
+FROM python:3.11-slim
+WORKDIR /app
+
+# 1. Cài đặt các công cụ hệ thống thiết yếu và LibreOffice Headless
+RUN apt-get update && apt-get install -y \
+    libreoffice \
+    libreoffice-writer \
+    fontconfig \
+    curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# 2. Cài ĐẦY ĐỦ các thư viện Python (Đã thêm requests và psycopg2-binary)
+RUN pip install --no-cache-dir \
+    flask \
+    docxtpl \
+    python-docx \
+    playwright \
+    requests \
+    psycopg2-binary \
+    openpyxl \
+    python-dotenv \
+    docx2pdf
+
+# 3. Cài đặt bọc thép trình duyệt Chromium kèm dependencies hệ thống của nó
+RUN playwright install --with-deps chromium
+
+# 4. MẸO CHÍ MẠNG: Copy font Times New Roman từ ngoài vào để LibreOffice render PDF không lỗi
+# (Ông tạo 1 thư mục tên 'fonts' nằm ngang hàng với Dockerfile này, quăng file times.ttf và timesbd.ttf vào đó nhé)
+COPY ./fonts /usr/share/fonts/truetype/msttcorefonts/
+RUN fc-cache -f -v
+
+# 5. Copy TOÀN BỘ mã nguồn vào container (Thay vì copy lẻ tẻ từng file)
+COPY . /app
+
+CMD ["python", "api.py"]

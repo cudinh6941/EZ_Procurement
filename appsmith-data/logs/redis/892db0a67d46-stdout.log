@@ -1,0 +1,14 @@
+1718:C 10 Jun 2026 01:49:47.251 # WARNING Memory overcommit must be enabled! Without it, a background save or replication may fail under low memory condition. Being disabled, it can also cause failures without low memory condition, see https://github.com/jemalloc/jemalloc/issues/1328. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+1718:C 10 Jun 2026 01:49:47.251 * oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1718:C 10 Jun 2026 01:49:47.251 * Redis version=7.4.8, bits=64, commit=00000000, modified=0, pid=1718, just started
+1718:C 10 Jun 2026 01:49:47.251 * Configuration loaded
+1718:M 10 Jun 2026 01:49:47.252 * Increased maximum number of open files to 10032 (it was originally set to 1024).
+1718:M 10 Jun 2026 01:49:47.252 * monotonic clock: POSIX clock_gettime
+1718:M 10 Jun 2026 01:49:47.254 * Running mode=standalone, port=6379.
+1718:M 10 Jun 2026 01:49:47.255 * Server initialized
+1718:M 10 Jun 2026 01:49:47.259 * Loading RDB produced by version 7.4.8
+1718:M 10 Jun 2026 01:49:47.259 * RDB age 1060 seconds
+1718:M 10 Jun 2026 01:49:47.259 * RDB memory usage when created 1.19 Mb
+1718:M 10 Jun 2026 01:49:47.260 * Done loading RDB, keys loaded: 13, keys expired: 0.
+1718:M 10 Jun 2026 01:49:47.262 * DB loaded from disk: 0.007 seconds
+1718:M 10 Jun 2026 01:49:47.262 * Ready to accept connections tcp

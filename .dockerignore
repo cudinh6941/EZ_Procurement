@@ -1,0 +1,4 @@
+appsmith-data/
+postgres_data/
+node_modules/
+.git/
