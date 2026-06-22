@@ -247,14 +247,22 @@ export default function ProcurementProfilePage() {
       // });
 
       if (result.success && result.fileName) {
+        // ✅ Cả DB lẫn Flask đều thành công
         showToast(
           "success",
           "Thành công! 🎉",
           "Hồ sơ đã lưu Database thành công & File zip đã sẵn sàng tải xuống."
         );
-        // Automatically open generated file in a new tab for download
         window.open(`http://localhost:5000/download-file/${result.fileName}`, "_blank");
+      } else if (result.success && !result.fileName) {
+        // ⚠️ DB thành công, nhưng Flask không sinh ra file
+        showToast(
+          "info",
+          "Lưu DB thành công, chưa có file",
+          `Hồ sơ ${result.maHoSo || ""} đã được ghi vào Database. Tuy nhiên Flask chưa trả về file — kiểm tra Flask server có đang chạy không.`
+        );
       } else {
+        // ❌ DB transaction thất bại
         showToast(
           "error",
           "Lỗi hệ thống",

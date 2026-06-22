@@ -109,12 +109,12 @@ def generate_document():
             return os.path.basename(pdf_path)
         return None
 
-    # Định tuyến Gói 2 sang excel_factory
+    # Định tuyến Gói 2 sang excel_factory (backward compat)
     is_goi_2 = ("nha_cung_cap" in data) or ("phan_bo_ban_giao" in data) or (action == "goi_2")
     if is_goi_2:
         try:
             excel_gen = ExcelFactory()
-            result = excel_gen.generate_danh_gia_ky_thuat(data)
+            result = excel_gen.generate_cbe_excel(data)
             return jsonify({"file_sinh_ra": result}), 200
         except Exception as e:
             return jsonify({"error": str(e)}), 500
@@ -195,7 +195,62 @@ def generate_document():
                 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
+
+# ══════════════════════════════════════════════════════════════════════
+#  ROUTE GÓI 2: Đúc trọn bộ hồ sơ → ZIP
+# ══════════════════════════════════════════════════════════════════════
+@app.route('/generate-doc-goi2', methods=['POST'])
+def generate_doc_goi2():
+    """
+    Nhận payload đầy đủ từ goi2Actions.ts,
+    đúc tất cả biểu mẫu Gói 2 hiện có và đóng gói thành 1 file ZIP.
+
+    Biểu mẫu hiện implement:
+      - CBE Excel (QN-COM-PR01-FM06): Bảng đánh giá kỹ thuật + thương mại
+    """
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"error": "Payload rong hoac khong phai JSON"}), 400
+
+    ma_ho_so_raw = str(data.get("ma_ho_so", "Unknown"))
+    ma_ho_so_clean = ma_ho_so_raw.replace("/", "-").replace("\\", "-")
+
+    generated_files = []  # danh sach (duong_dan_tuyet_doi, ten_trong_zip)
+
+    # ── Bước 1: Đúc CBE Excel ──────────────────────────────────────────
+    try:
+        excel_gen = ExcelFactory()
+        cbe_result = excel_gen.generate_cbe_excel(data)
+        cbe_path = os.path.join(BASE_DATA_PATH, cbe_result["file_name"])
+        if os.path.exists(cbe_path):
+            generated_files.append((cbe_path, cbe_result["file_name"]))
+            print(f"[Goi2] Da duc CBE Excel: {cbe_result['file_name']}")
+    except Exception as e:
+        print(f"[Goi2] LOI duc CBE Excel: {e}")
+        return jsonify({"error": f"Loi duc CBE Excel: {str(e)}"}), 500
+
+    # ── (Slot cho các biểu mẫu Gói 2 tương lai) ───────────────────────
+    # Ví dụ: thu_moi_goi2, bien_ban_chon_nha_thau, hop_dong...
+    # Khi implement thêm, append vào generated_files tương tự bước 1.
+
+    # ── Bước cuối: Đóng gói ZIP ────────────────────────────────────────
+    if not generated_files:
+        return jsonify({"error": "Khong co file nao duoc tao ra"}), 500
+
+    zip_name = f"Bo_Ho_So_Goi2_{ma_ho_so_clean}_{int(time.time())}.zip"
+    zip_path = os.path.join(BASE_DATA_PATH, zip_name)
+
+    try:
+        with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
+            for abs_path, arc_name in generated_files:
+                zf.write(abs_path, arc_name)
+        print(f"[Goi2] Da dong goi ZIP: {zip_name} ({len(generated_files)} file)")
+    except Exception as e:
+        return jsonify({"error": f"Loi dong goi ZIP: {str(e)}"}), 500
+
+    return jsonify({"file_sinh_ra": {"status": "success", "file_name": zip_name}}), 200
+
 
 # --- GIỮ NGUYÊN TOÀN BỘ CÁC ROUTE KHÁC ĐỂ TRÁNH LỖI HỆ THỐNG BOT ---
 @app.route('/test-bot', methods=['GET'])

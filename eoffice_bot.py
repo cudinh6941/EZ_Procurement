@@ -220,9 +220,17 @@ def convert_docx_to_pdf(docx_path, output_dir=None):
     # ── WINDOWS: dùng docx2pdf (Microsoft Word COM) ──────────────────
     if sys.platform.startswith("win"):
         try:
+            import pythoncom
             from docx2pdf import convert
-            print(f"[PDF] Windows mode: Dang dung Word COM convert {os.path.basename(docx_path)}...")
-            convert(docx_path, pdf_path)
+            # Bắt buộc phải CoInitialize trên mỗi thread của Flask
+            # trước khi dùng Word COM, nếu không sẽ lỗi -2147221008
+            pythoncom.CoInitialize()
+            try:
+                print(f"[PDF] Windows mode: Dang dung Word COM convert {os.path.basename(docx_path)}...")
+                convert(docx_path, pdf_path)
+            finally:
+                pythoncom.CoUninitialize()
+
             if os.path.exists(pdf_path):
                 print(f"[PDF] Thanh cong! File PDF tai: {pdf_path}")
                 return pdf_path
@@ -230,7 +238,7 @@ def convert_docx_to_pdf(docx_path, output_dir=None):
                 print(f"[PDF] docx2pdf chay xong nhung khong tim thay file PDF dau ra: {pdf_path}")
                 return None
         except ImportError:
-            print("[PDF] Thu vien docx2pdf chua duoc cai. Chay: pip install docx2pdf")
+            print("[PDF] Thu vien docx2pdf hoac pywin32 chua duoc cai. Chay: pip install docx2pdf pywin32")
             return None
         except Exception as e:
             print(f"[PDF] Loi khi dung docx2pdf: {e}")

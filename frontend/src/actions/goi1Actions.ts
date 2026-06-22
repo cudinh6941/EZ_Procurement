@@ -110,53 +110,60 @@ export async function submitHoSoGoi1(
     // 4. Commit SQL Transaction
     await client.query("COMMIT");
 
-    // 5. Trigger Flask document generation endpoint
-    const apiPayload = {
-      action: "all", // requests zip compilation of all package 1 documents
-      id: hoSoId,
-      ho_so_id: hoSoId,
-      ma_ho_so: maHoSo,
-      soDeXuat: formData.soDeXuat,
-      ngayDeXuat: formData.ngayDeXuat,
-      muaChoAi: formData.muaChoAi,
-      boPhanYeuCau: formData.boPhanYeuCau,
-      thoiGianGiaoHang: formData.thoiGianGiaoHang,
-      soThuMoi: formData.soThuMoi,
-      thoiGianBaoHanh: formData.thoiGianBaoHanh,
-      ngayLamThuMoi: formData.ngayLamThuMoi,
-      hanChotChaoGia: formData.hanChotChaoGia,
-      danhSachHangHoa: itemsData.map((item, idx) => ({
-        stt: idx + 1,
-        tenHangHoa: item.tenHangHoa,
-        dvt: item.dvt,
-        soLuong: Number(item.soLuong),
-        giaTien: Number(item.giaTien) || 0,
-        chungChi: item.chungChi,
-        chiTiet: item.chiTiet,
-        ghiChu: item.ghiChu,
-        chung_chi: item.chungChi,
-      })),
-    };
+    // ─── Bước 5: Query lại DB lấy full data → gửi Flask ────────────────
+    // Đây là bản sao chính xác query n8n đang dùng, migrate trực tiếp vào đây
+    let fileName = "";
+    try {
+      const dbResult = await client.query(
+        `SELECT
+           h.*,
+           t.ten_ncc,
+           t.mst,
+           t.so_tai_khoan,
+           t.ten_ngan_hang,
+           t.so_hoa_don,
+           t.tong_tien_co_vat,
+           t.so_tien_bang_chu,
+           (
+             SELECT json_agg(row_to_json(d))
+             FROM danh_sach_hang_hoa d
+             WHERE d.ho_so_id = h.id
+           ) AS danh_sach_hang_hoa
+         FROM ho_so_mua_sam h
+         LEFT JOIN thong_tin_thanh_toan t ON t.ho_so_id = h.id
+         WHERE h.id = $1`,
+        [hoSoId]
+      );
 
-    const response = await fetch("http://localhost:5678/webhook-test/generate-doc-package1", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(apiPayload),
-    });
+      const hoSoRow = dbResult.rows[0] ?? {};
 
-    if (!response.ok) {
-      throw new Error(`Failed to generate files. API status: ${response.status}`);
+      // Flask payload = DB row (snake_case) + các trường bổ sung mà word_factory cần
+      const flaskPayload = {
+        ...hoSoRow,                           // Tất cả cột từ ho_so_mua_sam + thong_tin_thanh_toan
+        action: "all",                        // Yêu cầu Flask đúc trọn bộ (zip)
+        ho_so_id: hoSoId,
+        // Các field camelCase mà goi1Actions.ts truyền thêm (ngay_lam_thu_moi...)
+        ngay_thu_moi: formData.ngayLamThuMoi, // ban_giao builder dùng ngay_thu_moi
+      };
+
+      const resp = await fetch("http://localhost:5000/generate-doc", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(flaskPayload),
+      });
+
+      if (resp.ok) {
+        const respData = await resp.json();
+        fileName = respData.file_sinh_ra?.file_name || "";
+      } else {
+        const errText = await resp.text();
+        console.warn(`[Goi1] Flask tra loi ${resp.status}:`, errText);
+      }
+    } catch (fetchErr) {
+      console.warn("[Goi1] Loi khi query DB hoac goi Flask:", fetchErr);
     }
 
-    const data = await response.json();
-    const fileName = data.file_sinh_ra?.file_name || "";
-
-    return {
-      success: true,
-      fileName,
-    };
+    return { success: true, hoSoId, maHoSo, fileName };
   } catch (error: any) {
     // Rollback changes on any query or network failure
     await client.query("ROLLBACK");

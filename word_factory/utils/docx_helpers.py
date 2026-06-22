@@ -75,7 +75,7 @@ def fill_hang_hoa_table(docx_path, danh_sach_hang_hoa, action="thu_moi"):
         danh_sach_hang_hoa = []
 
     for item in danh_sach_hang_hoa:
-        print("DEBUG DATA HÀNG HÓA NHẬN ĐƯỢC:", item, flush=True)
+        # [DEBUG removed] - caused UnicodeEncodeError on Windows cp1252 stdout
         row = target_table.add_row()
         for i, cell in enumerate(row.cells):
             if i < len(sample_cell_tcprs):

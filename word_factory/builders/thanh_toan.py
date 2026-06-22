@@ -1,6 +1,6 @@
 import os
 import time
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from docxtpl import DocxTemplate
 from word_factory.utils.formatters import doc_so_tien_vnd, sanitize_filename
 from word_factory.services.goods_processor import clean_and_summarize_goods
@@ -32,8 +32,22 @@ def build_thanh_toan_doc(data):
     ngay_dx_format = "..../..../...."
     if ngay_dx_raw:
         try:
-            clean_date = str(ngay_dx_raw).split("T")[0].split(" ")[0]
-            ngay_dx_format = datetime.strptime(clean_date, "%Y-%m-%d").strftime("%d/%m/%Y")
+            raw_str = str(ngay_dx_raw).strip()
+            # Nếu là ISO timestamp có chữ T (e.g. 2026-06-21T17:00:00Z hoặc 2026-06-21T17:00:00+00:00)
+            # → DB lưu UTC, phải cộng +7 để ra giờ Việt Nam trước khi lấy ngày
+            if "T" in raw_str:
+                # Chuẩn hóa: bỏ Z cuối, thay bằng +00:00 để fromisoformat hiểu
+                raw_str_iso = raw_str.replace("Z", "+00:00")
+                dt_utc = datetime.fromisoformat(raw_str_iso)
+                # Nếu không có tzinfo, coi là UTC
+                if dt_utc.tzinfo is None:
+                    dt_utc = dt_utc.replace(tzinfo=timezone.utc)
+                dt_vn = dt_utc.astimezone(timezone(timedelta(hours=7)))
+                ngay_dx_format = dt_vn.strftime("%d/%m/%Y")
+            else:
+                # Chỉ có phần ngày thuần (YYYY-MM-DD), parse trực tiếp không cần convert
+                clean_date = raw_str.split(" ")[0]
+                ngay_dx_format = datetime.strptime(clean_date, "%Y-%m-%d").strftime("%d/%m/%Y")
         except Exception:
             ngay_dx_format = str(ngay_dx_raw)
 

@@ -376,3 +376,24 @@ APPSMITH_GIT_ROOT: /appsmith-stacks/git-storage
 {"level":"info","ts":1781849738.4971983,"msg":"serving initial configuration"}
 {"level":"info","ts":1781849738.577923,"logger":"tls","msg":"storage cleaning happened too recently; skipping for now","storage":"FileStorage:/appsmith-stacks/data/caddy","instance":"a106c22c-794f-46f6-a690-e540da6957df","try_again":1781936138.577918,"try_again_in":86399.9999993}
 {"level":"info","ts":1781849738.5912914,"logger":"tls","msg":"finished cleaning storage units"}
+APPSMITH_GIT_ROOT: /appsmith-stacks/git-storage
+{"level":"info","ts":1782095534.9769247,"msg":"using config from file","file":"/tmp/appsmith/Caddyfile"}
+{"level":"info","ts":1782095534.9829416,"msg":"adapted config to JSON","adapter":"caddyfile"}
+{"level":"info","ts":1782095535.0520146,"msg":"maxprocs: Leaving GOMAXPROCS=8: CPU quota undefined"}
+{"level":"info","ts":1782095535.0520597,"msg":"GOMEMLIMIT is updated","GOMEMLIMIT":3593886105,"previous":9223372036854775807}
+{"level":"info","ts":1782095535.0520668,"msg":"using config from file","file":"/tmp/appsmith/Caddyfile"}
+{"level":"info","ts":1782095535.0520692,"msg":"adapted config to JSON","adapter":"caddyfile"}
+{"level":"info","ts":1782095535.0528383,"logger":"admin","msg":"admin endpoint started","address":"unix//tmp/appsmith/caddy.sock","enforce_origin":false,"origins":[]}
+{"level":"warn","ts":1782095535.0528584,"logger":"admin","msg":"admin endpoint on open interface; host checking disabled","address":"unix//tmp/appsmith/caddy.sock"}
+{"level":"info","ts":1782095535.053478,"logger":"tls.cache.maintenance","msg":"started background certificate maintenance","cache":"0x2dbd7ccaab80"}
+{"level":"warn","ts":1782095535.06772,"logger":"http.auto_https","msg":"server is listening only on the HTTP port, so no automatic HTTPS will be applied to this server","server_name":"srv1","http_port":80}
+{"level":"warn","ts":1782095535.0768926,"logger":"http","msg":"HTTP/2 skipped because it requires TLS","network":"tcp","addr":":2019"}
+{"level":"warn","ts":1782095535.0769374,"logger":"http","msg":"HTTP/3 skipped because it requires TLS","network":"tcp","addr":":2019"}
+{"level":"info","ts":1782095535.0769448,"logger":"http.log","msg":"server running","name":"srv0","protocols":["h1","h2","h3"]}
+{"level":"warn","ts":1782095535.077106,"logger":"http","msg":"HTTP/2 skipped because it requires TLS","network":"tcp","addr":":80"}
+{"level":"warn","ts":1782095535.077115,"logger":"http","msg":"HTTP/3 skipped because it requires TLS","network":"tcp","addr":":80"}
+{"level":"info","ts":1782095535.0771194,"logger":"http.log","msg":"server running","name":"srv1","protocols":["h1","h2","h3"]}
+{"level":"info","ts":1782095535.0771766,"msg":"serving initial configuration"}
+{"level":"info","ts":1782095535.0905628,"logger":"tls","msg":"storage cleaning happened too recently; skipping for now","storage":"FileStorage:/appsmith-stacks/data/caddy","instance":"a106c22c-794f-46f6-a690-e540da6957df","try_again":1782181935.0905578,"try_again_in":86399.9999992}
+{"level":"info","ts":1782095535.0939295,"logger":"tls","msg":"finished cleaning storage units"}
+{"level":"info","ts":1782122345.1127594,"msg":"quitting process immediately","signal":"SIGQUIT"}
