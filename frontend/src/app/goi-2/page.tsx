@@ -86,7 +86,7 @@ export default function Goi2ProcurementPage() {
   // Sync goods list into vendor quotes and handover allocations
   useEffect(() => {
     const currentItems = getValues("items") || [];
-    
+
     // 1. Sync quotes in vendors
     const currentVendors = getValues("nha_cung_cap") || [];
     const updatedVendors = currentVendors.map((vendor) => {
@@ -110,7 +110,7 @@ export default function Goi2ProcurementPage() {
     const currentAllocations = getValues("phan_bo_ban_giao") || [];
     const updatedAllocations = currentItems.map((item) => {
       const existing = currentAllocations.find((a) => a.ten_hang === item.ten_hang);
-      
+
       if (!existing || !existing.allocations || existing.allocations.length === 0) {
         return {
           ten_hang: item.ten_hang,
@@ -121,12 +121,12 @@ export default function Goi2ProcurementPage() {
       // If quantity has changed, adjust the allocations sum
       const sumAllocated = existing.allocations.reduce((sum, a) => sum + Number(a.so_luong_nhan), 0);
       const targetQty = Number(item.so_luong) || 0;
-      
+
       if (sumAllocated !== targetQty) {
         const firstAlloc = existing.allocations[0];
         const restAllocs = existing.allocations.slice(1);
         const restSum = restAllocs.reduce((sum, a) => sum + Number(a.so_luong_nhan), 0);
-        
+
         return {
           ten_hang: item.ten_hang,
           allocations: [
@@ -181,6 +181,7 @@ export default function Goi2ProcurementPage() {
           dvt: "Cái",
           so_luong: 3,
           chung_chi: "CO, CQ, CE, ISO 9001",
+          thoi_gian_bao_hanh: "36 tháng",
           ghi_chu: "Bàn giao đầy đủ phụ kiện balo và chuột không dây đi kèm."
         },
         {
@@ -190,6 +191,7 @@ export default function Goi2ProcurementPage() {
           dvt: "Cái",
           so_luong: 2,
           chung_chi: "CO, CQ, RoHS",
+          thoi_gian_bao_hanh: "12 tháng",
           ghi_chu: "Thiết bị mới 100%, bảo hành 12 tháng."
         },
         {
@@ -199,6 +201,7 @@ export default function Goi2ProcurementPage() {
           dvt: "Tủ",
           so_luong: 1,
           chung_chi: "CO, CQ",
+          thoi_gian_bao_hanh: "6 tháng",
           ghi_chu: "Lắp đặt cố định tại phòng máy chủ"
         }
       ],
@@ -332,12 +335,11 @@ export default function Goi2ProcurementPage() {
   return (
     <FormProvider {...methods}>
       <div className="flex h-screen w-full bg-slate-50/50 text-slate-800 dark:bg-zinc-950 dark:text-slate-100 overflow-hidden font-sans">
-        
+
         {/* 1. LEFT SIDEBAR */}
         <aside
-          className={`relative flex flex-col bg-slate-900 text-slate-200 border-r border-slate-800 transition-all duration-300 ease-in-out z-20 ${
-            isSidebarCollapsed ? "w-16" : "w-64"
-          }`}
+          className={`relative flex flex-col bg-slate-900 text-slate-200 border-r border-slate-800 transition-all duration-300 ease-in-out z-20 ${isSidebarCollapsed ? "w-16" : "w-64"
+            }`}
         >
           <div className="flex items-center h-16 px-4 border-b border-slate-800 bg-slate-950/40">
             <div className="flex items-center gap-3 overflow-hidden">
@@ -416,7 +418,7 @@ export default function Goi2ProcurementPage() {
 
         {/* 2. MAIN APPLICATION CONTAINER */}
         <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-          
+
           {/* TOPBAR */}
           <header className="h-16 border-b border-slate-200 bg-white dark:bg-zinc-900 dark:border-zinc-800 flex items-center justify-between px-6 shrink-0 z-10">
             <div className="flex flex-col">
@@ -489,7 +491,7 @@ export default function Goi2ProcurementPage() {
           {/* MAIN SCROLLABLE CONTENT */}
           <main className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8 pb-28">
             <form onSubmit={handleSubmit(onSubmit)} className="max-w-6xl mx-auto space-y-8">
-              
+
               {/* SECTION 1: GOI 1 REUSABLE BASE FORM */}
               <div className="space-y-6">
                 <Goi1BaseForm isSidebarCollapsed={isSidebarCollapsed} />
@@ -498,7 +500,7 @@ export default function Goi2ProcurementPage() {
               {/* SECTION 2: NHẬP BÁO GIÁ */}
               <section className="bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 rounded-2xl shadow-sm p-6 md:p-8 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-1.5 h-full bg-indigo-500"></div>
-                
+
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                   <div className="flex items-center gap-2.5">
                     <div className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-500 dark:text-indigo-400 shrink-0">
@@ -656,11 +658,10 @@ export default function Goi2ProcurementPage() {
                                               className="accent-indigo-600 hidden"
                                             />
                                             <span
-                                              className={`px-2 py-0.5 rounded ${
-                                                watch(`${quoteFieldPrefix}.danh_gia` as any) === "dat"
+                                              className={`px-2 py-0.5 rounded ${watch(`${quoteFieldPrefix}.danh_gia` as any) === "dat"
                                                   ? "bg-indigo-600 text-white shadow-sm"
                                                   : "text-slate-450"
-                                              }`}
+                                                }`}
                                             >
                                               ĐẠT
                                             </span>
@@ -673,11 +674,10 @@ export default function Goi2ProcurementPage() {
                                               className="accent-rose-600 hidden"
                                             />
                                             <span
-                                              className={`px-2 py-0.5 rounded ${
-                                                watch(`${quoteFieldPrefix}.danh_gia` as any) === "khong_dat"
+                                              className={`px-2 py-0.5 rounded ${watch(`${quoteFieldPrefix}.danh_gia` as any) === "khong_dat"
                                                   ? "bg-rose-550 text-white shadow-sm"
                                                   : "text-slate-450"
-                                              }`}
+                                                }`}
                                             >
                                               K.ĐẠT
                                             </span>
@@ -696,7 +696,7 @@ export default function Goi2ProcurementPage() {
                             <div className="text-[11px] text-slate-500 font-medium">
                               * Công thức: Tổng cộng = Tổng chưa VAT + VAT ({watchedVendors[vendorIdx]?.thue_vat || 0}%)
                             </div>
-                            
+
                             <div className="flex flex-wrap gap-6 text-xs font-bold text-slate-700 dark:text-slate-350">
                               <div>
                                 Chưa VAT: <span className="text-slate-900 dark:text-white">{vSum.preVat.toLocaleString()} VND</span>
@@ -719,7 +719,7 @@ export default function Goi2ProcurementPage() {
               {/* SECTION 3: CHỐT THẦU */}
               <section className="bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 rounded-2xl shadow-sm p-6 md:p-8 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
-                
+
                 <div className="flex items-center gap-2.5 mb-6">
                   <div className="p-1.5 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-500 dark:text-amber-400 shrink-0">
                     <Award className="size-5" />
@@ -815,7 +815,7 @@ export default function Goi2ProcurementPage() {
               {/* SECTION 4: PHÂN BỔ BÀN GIAO */}
               <section className="bg-white dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 rounded-2xl shadow-sm p-6 md:p-8 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-1.5 h-full bg-violet-600"></div>
-                
+
                 <div className="flex items-center gap-2.5 mb-6">
                   <div className="p-1.5 rounded-lg bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 shrink-0">
                     <UserCheck className="size-5" />
@@ -841,7 +841,7 @@ export default function Goi2ProcurementPage() {
                     {watchedItems.map((item, itemIdx) => {
                       const allocKey = `phan_bo_ban_giao.${itemIdx}`;
                       const qtyTotal = Number(item.so_luong) || 0;
-                      
+
                       const itemAllocations = watch(`${allocKey}.allocations` as any) || [];
                       const sumAlloc = itemAllocations.reduce((s: number, a: any) => s + (Number(a.so_luong_nhan) || 0), 0);
                       const isMatched = sumAlloc === qtyTotal;
@@ -950,9 +950,8 @@ export default function Goi2ProcurementPage() {
           {/* STICKY BOTTOM ACTION BAR */}
           <div className="fixed bottom-0 left-0 right-0 h-18 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border-t border-slate-200/80 dark:border-zinc-800/80 flex items-center justify-between px-6 md:px-8 z-40 shadow-[0_-4px_16px_rgba(0,0,0,0.04)]">
             <div
-              className={`transition-all duration-300 ease-in-out hidden md:flex items-center gap-2 ${
-                isSidebarCollapsed ? "pl-16" : "pl-64"
-              }`}
+              className={`transition-all duration-300 ease-in-out hidden md:flex items-center gap-2 ${isSidebarCollapsed ? "pl-16" : "pl-64"
+                }`}
             >
               <div className="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 font-medium">
                 <span>Đại diện trúng:</span>
@@ -1030,8 +1029,8 @@ export default function Goi2ProcurementPage() {
                     toast.type === "success"
                       ? "#4f46e5"
                       : toast.type === "error"
-                      ? "#f43f5e"
-                      : "#818cf8",
+                        ? "#f43f5e"
+                        : "#818cf8",
                 }}
               >
                 <div className="shrink-0 pt-0.5">

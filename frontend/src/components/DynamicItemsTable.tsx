@@ -19,6 +19,7 @@ interface MaterialItem {
   soLuong: number | "";
   dvt: string;
   chungChi: string;
+  thoiGianBaoHanh?: string;
   chiTiet: string;
   ghiChu: string;
 }
@@ -52,6 +53,7 @@ export default function DynamicItemsTable({
     soLuong: "" as number | "",
     dvt: "Cái",
     chungChi: "",
+    thoiGianBaoHanh: "",
     chiTiet: "",
     ghiChu: "",
   });
@@ -67,6 +69,7 @@ export default function DynamicItemsTable({
       soLuong: "",
       dvt: "Cái",
       chungChi: "",
+      thoiGianBaoHanh: "",
       chiTiet: "",
       ghiChu: "",
     });
@@ -114,13 +117,13 @@ export default function DynamicItemsTable({
       return;
     }
 
-    // Call parent handler
     onAddItem({
       tenHangHoa: newItem.tenHangHoa,
       giaTien: newItem.giaTien === "" ? 0 : Number(newItem.giaTien),
       soLuong: Number(newItem.soLuong),
       dvt: newItem.dvt,
       chungChi: newItem.chungChi,
+      thoiGianBaoHanh: newItem.thoiGianBaoHanh,
       chiTiet: newItem.chiTiet,
       ghiChu: newItem.ghiChu,
     });
@@ -205,7 +208,7 @@ export default function DynamicItemsTable({
                 <th className="py-3 px-4 min-w-[150px]">Tên Hàng Hóa</th>
                 <th className="py-3 px-4 min-w-[180px]">Chi Tiết Kỹ Thuật</th>
                 <th className="py-3 px-4 min-w-[150px]">Chứng Chỉ Yêu Cầu</th>
-                <th className="py-3 px-4 min-w-[120px]">Ghi Chú</th>
+                <th className="py-3 px-4 min-w-[120px]">Bảo hành</th>
                 <th className="py-3 px-4 w-16 text-center">Tác Vụ</th>
               </tr>
             </thead>
@@ -249,7 +252,7 @@ export default function DynamicItemsTable({
                     )}
                   </td>
                   <td className="py-3 px-4 text-slate-600 dark:text-slate-400 pt-4 max-w-[150px] break-words">
-                    {item.ghiChu || <em className="text-slate-350">-</em>}
+                    {item.thoiGianBaoHanh || <em className="text-slate-350">-</em>}
                   </td>
                   <td className="py-3 px-4 text-center pt-3">
                     <button
@@ -434,6 +437,20 @@ export default function DynamicItemsTable({
                     placeholder="VD: CO, CQ, ISO 9001 (phân tách bằng dấu phẩy)"
                     value={newItem.chungChi}
                     onChange={(e) => handleInputChange("chungChi", e.target.value)}
+                    className="h-9 px-3 text-xs rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-white placeholder:text-slate-400 outline-none transition-all focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600"
+                  />
+                </div>
+
+                {/* Thời gian bảo hành */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-350">
+                    Thời Gian Bảo Hành
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="VD: 12 tháng, 24 tháng..."
+                    value={newItem.thoiGianBaoHanh}
+                    onChange={(e) => handleInputChange("thoiGianBaoHanh", e.target.value)}
                     className="h-9 px-3 text-xs rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-white placeholder:text-slate-400 outline-none transition-all focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600"
                   />
                 </div>

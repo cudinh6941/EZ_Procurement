@@ -112,6 +112,7 @@ export default function Goi1BaseForm({
       soLuong: item.so_luong || "",
       dvt: item.dvt || "Cái",
       chungChi: item.chung_chi || "",
+      thoiGianBaoHanh: item.thoi_gian_bao_hanh || "",
       chiTiet: item.chi_tiet || "",
       ghiChu: item.ghi_chu || "",
     }));
@@ -127,6 +128,7 @@ export default function Goi1BaseForm({
           so_luong: Number(newItemData.soLuong) || 0,
           dvt: newItemData.dvt,
           chung_chi: newItemData.chungChi,
+          thoi_gian_bao_hanh: newItemData.thoiGianBaoHanh,
           chi_tiet: newItemData.chiTiet,
           ghi_chu: newItemData.ghiChu,
         },

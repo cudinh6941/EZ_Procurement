@@ -10,6 +10,7 @@ export interface Goi2Item {
   so_luong: number;
   don_gia?: number;
   chung_chi?: string;
+  thoi_gian_bao_hanh?: string;
   ghi_chu?: string;
 }
 
@@ -121,8 +122,8 @@ export async function submitHoSoGoi2(payload: Goi2Payload) {
       const itemResult = await client.query(
         `INSERT INTO danh_sach_hang_hoa (
            ho_so_id, stt, ten_hang, chi_tiet, dvt,
-           so_luong, don_gia, ghi_chu, chung_chi
-         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+           so_luong, don_gia, ghi_chu, chung_chi, thoi_gian_bao_hanh
+         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
          RETURNING id`,
         [
           hoSoId,
@@ -134,6 +135,7 @@ export async function submitHoSoGoi2(payload: Goi2Payload) {
           donGia,
           item.ghi_chu || `Trúng thầu bởi: ${tenNhaThauTrung}`,
           item.chung_chi || "",
+          item.thoi_gian_bao_hanh || "",
         ]
       );
 
@@ -211,6 +213,7 @@ export async function submitHoSoGoi2(payload: Goi2Payload) {
             so_luong: item.so_luong,
             don_gia: Number(wq?.don_gia) || 0,
             chung_chi: item.chung_chi || "",
+            thoi_gian_bao_hanh: item.thoi_gian_bao_hanh || "",
             ghi_chu: item.ghi_chu || "",
           };
         }),
